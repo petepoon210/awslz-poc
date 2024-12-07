@@ -1,27 +1,25 @@
-# awslz-poc-sample-code
-
 provider "aws" {
   region = "us-east-1"  # Change to your preferred region
 }
 
-resource "aws_vpc" "main" {
+resource "aws_vpc" "vpc_poc" {
   cidr_block = "10.10.10.0/24"
   enable_dns_support = true
   enable_dns_hostnames = true
 }
 
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.vpc_poc.id
 }
 
 resource "aws_subnet" "public" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.vpc_poc.id
   cidr_block        = "10.10.10.0/24"
   map_public_ip_on_launch = true
 }
 
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.vpc_poc.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -35,7 +33,7 @@ resource "aws_route_table_association" "public_assoc" {
 }
 
 resource "aws_security_group" "sg" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.vpc_poc.id
 
   ingress {
     from_port   = 22
@@ -66,11 +64,11 @@ resource "aws_security_group" "sg" {
   }
 }
 
-resource "aws_instance" "ubuntu" {
+resource "aws_instance" "ubuntu_poc" {
   ami           = "ami-0c55b159cbfafe1f0"  # Replace with the latest Ubuntu AMI for your region
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public.id
   security_groups = [aws_security_group.sg.name]
 
-  tags = { Name = "MyUbuntuInstance" }
+  tags = { Name = "ubuntu-poc" }
 }
