@@ -65,10 +65,10 @@ resource "aws_security_group" "sg" {
 }
 
 resource "aws_instance" "ubuntu_poc" {
-  ami           = "ami-0c55b159cbfafe1f0"  # Replace with the latest Ubuntu AMI for your region
-  instance_type = "t2.micro"
+  ami           = "ami-0932ffb346ea84d48"  # Replace with the latest Ubuntu AMI for your region
+  instance_type = "t4g.nano"
   subnet_id     = aws_subnet.public.id
-  security_groups = [aws_security_group.sg.name]
+  vpc_security_group_ids = ["sg-0c6a1d6c6577a19fe"]
 
   tags = { Name = "ubuntu-poc" }
 }
